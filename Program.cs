@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Security.Principal;
 using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
@@ -14,7 +15,7 @@ namespace ConsolidatorScript
     {
         static async Task Main(string[] args)
         {
-            var TimeString = "02:15 pm";
+            var TimeString = "12:01 pm";
             DateTime Time = DateTime.Parse(TimeString);
             
             while (true)
@@ -22,8 +23,9 @@ namespace ConsolidatorScript
                 while (DateTime.Now.ToString("hh:mm tt") == Time.ToString("hh:mm tt"))
                 {
                     var AllItems = await new Items().GetAllItems();
+                    //AllItems = from a in AllItems where a.Itemcode == 1358 && a.Accountcode == 1 && a.Supplier == 6 && a.Brandcode == 24 select a;
                     var Items = await new Items().GetItems();
-                    foreach (var item in Items)
+                    foreach (var item in AllItems)
                     {
                         var FinalStock = new List<ConsolidateModel>();
 
@@ -56,11 +58,19 @@ namespace ConsolidatorScript
                                         Balance = group.Sum(a => a.Balance)
                                     }).ToList();
 
-                        var InsertData = await new ItemsLayer().SaveToTable(FinalStock);
-                        if(InsertData == "success")
-                            Console.WriteLine("ItemCode:{0}, AccountCode: {1}, SupplierID: {2}, BrandCode: {3}, Sellprice : {4} Updated : {5} ", FinalStock.FirstOrDefault().ItemCode, FinalStock.FirstOrDefault().AccountCode, FinalStock.FirstOrDefault().SupplierID, FinalStock.FirstOrDefault().BrandCode, FinalStock.FirstOrDefault().Sellprice, DateTime.Now.ToString("MM/dd/yyyy hh:mm tt"));
-                        else
-                            Console.WriteLine("ItemCode:{0}, AccountCode: {1}, SupplierID: {2}, BrandCode: {3}, Sellprice : {4} UNABLE TO UPDATE ", FinalStock.FirstOrDefault().ItemCode, FinalStock.FirstOrDefault().AccountCode, FinalStock.FirstOrDefault().SupplierID, FinalStock.FirstOrDefault().BrandCode, FinalStock.FirstOrDefault().Sellprice);
+                        if (FinalStock.Any())
+                        {
+                            foreach(var itemsList in FinalStock)
+                            {
+                                var InsertData = await new ItemsLayer().SaveToTable(itemsList);
+                                if (InsertData == "success")
+                                    Console.WriteLine("ItemCode:{0}, AccountCode: {1}, SupplierID: {2}, BrandCode: {3}, Sellprice : {4} Updated : {5} ", itemsList.ItemCode, itemsList.AccountCode, itemsList.SupplierID, itemsList.BrandCode, itemsList.Sellprice, DateTime.Now.ToString("MM/dd/yyyy hh:mm tt"));
+                                else
+                                    Console.WriteLine("ItemCode:{0}, AccountCode: {1}, SupplierID: {2}, BrandCode: {3}, Sellprice : {4} UNABLE TO UPDATE ", itemsList.ItemCode, itemsList.AccountCode, itemsList.SupplierID, itemsList.BrandCode, itemsList.Sellprice);
+                            }
+                        }
+                        
+                        
                         //Console.WriteLine("AccountCode :" +  FinalStock.FirstOrDefault().AccountCode);
                         //Console.WriteLine("SupplierID :" + FinalStock.FirstOrDefault().SupplierID);
                         //Console.WriteLine("ItemCode :" + FinalStock.FirstOrDefault().ItemCode);
@@ -71,6 +81,7 @@ namespace ConsolidatorScript
                     }
                     Thread.Sleep(60 * 500);
                 }
+                Thread.Sleep(60 * 500);
             }
             
         }

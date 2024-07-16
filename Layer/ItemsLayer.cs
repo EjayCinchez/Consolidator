@@ -16,7 +16,7 @@ namespace ConsolidatorScript.Layer
     {
         readonly Connection Connection = new Connection();
 
-        public async Task<string> SaveToTable(List<ConsolidateModel> ConsolidateModel)
+        public async Task<string> SaveToTable(ConsolidateModel ConsolidateModel)
         {
 
             var result = "";
@@ -31,11 +31,11 @@ namespace ConsolidatorScript.Layer
                     {
                         SQL = "select count(*) from Tbl_ConsolidateItems where ItemCode=@ItemCode and AccountCode=@AccountCode and BrandCode=@BrandCode and SupplierID=@SupplierID and Sellprice=@Sellprice";
                         int cnt = (int)await connection.ExecuteScalarAsync(SQL, new { 
-                            ConsolidateModel.FirstOrDefault().ItemCode,
-                            ConsolidateModel.FirstOrDefault().AccountCode,
-                            ConsolidateModel.FirstOrDefault().BrandCode,
-                            ConsolidateModel.FirstOrDefault().SupplierID,
-                            ConsolidateModel.FirstOrDefault().Sellprice,
+                            ConsolidateModel.ItemCode,
+                            ConsolidateModel.AccountCode,
+                            ConsolidateModel.BrandCode,
+                            ConsolidateModel.SupplierID,
+                            ConsolidateModel.Sellprice,
                         }, transaction, commandTimeout:int.MaxValue, commandType: CommandType.Text);
 
                         if (cnt >= 1)
@@ -43,12 +43,12 @@ namespace ConsolidatorScript.Layer
                             SQL = "update Tbl_ConsolidateItems set Balance=@Balance where ItemCode=@ItemCode and AccountCode=@AccountCode and BrandCode=@BrandCode and SupplierID=@SupplierID and Sellprice=@Sellprice";
                             await connection.ExecuteAsync(SQL, new
                             {
-                                ConsolidateModel.FirstOrDefault().ItemCode,
-                                ConsolidateModel.FirstOrDefault().AccountCode,
-                                ConsolidateModel.FirstOrDefault().BrandCode,
-                                ConsolidateModel.FirstOrDefault().SupplierID,
-                                ConsolidateModel.FirstOrDefault().Sellprice,
-                                ConsolidateModel.FirstOrDefault().Balance
+                                ConsolidateModel.ItemCode,
+                                ConsolidateModel.AccountCode,
+                                ConsolidateModel.BrandCode,
+                                ConsolidateModel.SupplierID,
+                                ConsolidateModel.Sellprice,
+                                ConsolidateModel.Balance
                             }, transaction, commandTimeout: int.MaxValue, commandType: CommandType.Text);
                         }
                         else
@@ -56,24 +56,24 @@ namespace ConsolidatorScript.Layer
                             SQL = "insert into Tbl_ConsolidateItems(ItemCode,AccountCode,SupplierID,BrandCode,Sellprice,Balance) values(@ItemCode,@AccountCode,@SupplierID,@BrandCode,@Sellprice,@Balance)";
                             await connection.ExecuteAsync(SQL, new
                             {
-                                ConsolidateModel.FirstOrDefault().ItemCode,
-                                ConsolidateModel.FirstOrDefault().AccountCode,
-                                ConsolidateModel.FirstOrDefault().BrandCode,
-                                ConsolidateModel.FirstOrDefault().SupplierID,
-                                ConsolidateModel.FirstOrDefault().Sellprice,
-                                ConsolidateModel.FirstOrDefault().Balance
+                                ConsolidateModel.ItemCode,
+                                ConsolidateModel.AccountCode,
+                                ConsolidateModel.BrandCode,
+                                ConsolidateModel.SupplierID,
+                                ConsolidateModel.Sellprice,
+                                ConsolidateModel.Balance
                             }, transaction, commandTimeout: int.MaxValue, commandType: CommandType.Text);
                         }
 
                         SQL = "insert into Tbl_ConsolidateItems_History(ItemCode,AccountCode,SupplierID,BrandCode,Sellprice,Balance) values(@ItemCode,@AccountCode,@SupplierID,@BrandCode,@Sellprice,@Balance)";
                         await connection.ExecuteAsync(SQL, new
                         {
-                            ConsolidateModel.FirstOrDefault().ItemCode,
-                            ConsolidateModel.FirstOrDefault().AccountCode,
-                            ConsolidateModel.FirstOrDefault().BrandCode,
-                            ConsolidateModel.FirstOrDefault().SupplierID,
-                            ConsolidateModel.FirstOrDefault().Sellprice,
-                            ConsolidateModel.FirstOrDefault().Balance
+                            ConsolidateModel.ItemCode,
+                            ConsolidateModel.AccountCode,
+                            ConsolidateModel.BrandCode,
+                            ConsolidateModel.SupplierID,
+                            ConsolidateModel.Sellprice,
+                            ConsolidateModel.Balance
                         }, transaction, commandTimeout: int.MaxValue, commandType: CommandType.Text);
 
                         transaction.Commit();
