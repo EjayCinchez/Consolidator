@@ -15,7 +15,7 @@ namespace ConsolidatorScript
     {
         static async Task Main(string[] args)
         {
-            var TimeString = "12:01 pm";
+            var TimeString = "12:01 am";
             DateTime Time = DateTime.Parse(TimeString);
             
             while (true)
