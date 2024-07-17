@@ -16,7 +16,7 @@ namespace ConsolidatorScript.Layer
     {
         readonly Connection Connection = new Connection();
 
-        public async Task<string> SaveToTable(ConsolidateModel ConsolidateModel)
+        public async Task<ConsolidateModelNew> SaveToTable(ConsolidateModel ConsolidateModel)
         {
 
             var result = "";
@@ -50,6 +50,7 @@ namespace ConsolidatorScript.Layer
                                 ConsolidateModel.Sellprice,
                                 ConsolidateModel.Balance
                             }, transaction, commandTimeout: int.MaxValue, commandType: CommandType.Text);
+                            result = "UPDATED";
                         }
                         else
                         {
@@ -63,6 +64,7 @@ namespace ConsolidatorScript.Layer
                                 ConsolidateModel.Sellprice,
                                 ConsolidateModel.Balance
                             }, transaction, commandTimeout: int.MaxValue, commandType: CommandType.Text);
+                            result = "ADDED";
                         }
 
                         SQL = "insert into Tbl_ConsolidateItems_History(ItemCode,AccountCode,SupplierID,BrandCode,Sellprice,Balance) values(@ItemCode,@AccountCode,@SupplierID,@BrandCode,@Sellprice,@Balance)";
@@ -77,7 +79,6 @@ namespace ConsolidatorScript.Layer
                         }, transaction, commandTimeout: int.MaxValue, commandType: CommandType.Text);
 
                         transaction.Commit();
-                        result = "success";
                     }
                     catch (Exception ex)
                     {
@@ -94,7 +95,17 @@ namespace ConsolidatorScript.Layer
                 }
             }
 
-            return result;
+            var Model = new ConsolidateModelNew {
+                AccountCode = ConsolidateModel.AccountCode,
+                SupplierID = ConsolidateModel.SupplierID,
+                ItemCode = ConsolidateModel.ItemCode,
+                BrandCode = ConsolidateModel.BrandCode,
+                Sellprice = ConsolidateModel.Sellprice,
+                Balance = ConsolidateModel.Balance,
+                Status = result
+            };
+
+            return Model;
         }
     }
 }
