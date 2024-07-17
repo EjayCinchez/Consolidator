@@ -16,4 +16,8 @@ namespace ConsolidatorScript.Model
         public int Adjtype { get; set; }
         public decimal Balance { get; set; }
     }
+    public class ConsolidateModelNew : ConsolidateModel
+    {
+        public string Status { get; set; }
+    }
 }
