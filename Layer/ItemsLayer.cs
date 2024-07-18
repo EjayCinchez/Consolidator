@@ -40,7 +40,7 @@ namespace ConsolidatorScript.Layer
 
                         if (cnt >= 1)
                         {
-                            SQL = "update Tbl_ConsolidateItems set Balance=@Balance where ItemCode=@ItemCode and AccountCode=@AccountCode and BrandCode=@BrandCode and SupplierID=@SupplierID and Sellprice=@Sellprice";
+                            SQL = "update Tbl_ConsolidateItems set Balance=@Balance, TransactionDate=getdate() where ItemCode=@ItemCode and AccountCode=@AccountCode and BrandCode=@BrandCode and SupplierID=@SupplierID and Sellprice=@Sellprice";
                             await connection.ExecuteAsync(SQL, new
                             {
                                 ConsolidateModel.ItemCode,
