@@ -24,6 +24,14 @@ namespace ConsolidatorScript.Implementation
                 return await sqlCon.QueryAsync<Tbl_rPhar_StockIn>(SQL, new { }, commandTimeout: int.MaxValue, commandType: CommandType.Text);
             }
         }
+        public async Task<IEnumerable<Tbl_rPhar_StockIn>> GetAllItems2()
+        {
+            var SQL = @"SELECT * FROM dbo.tbl_rPhar_StockIn WHERE itemcode NOT IN (SELECT DISTINCT ItemCode FROM dbo.Tbl_ConsolidateItems) AND actioncode = 1";
+            using (IDbConnection sqlCon = new SqlConnection(Connection.ConnectionString))
+            {
+                return await sqlCon.QueryAsync<Tbl_rPhar_StockIn>(SQL, new { }, commandTimeout: int.MaxValue, commandType: CommandType.Text);
+            }
+        }
         public async Task<IEnumerable<Tbl_rPhar_StockIn>> GetItems()
         {
             var SQL = @"with cte as (
