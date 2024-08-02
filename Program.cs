@@ -22,8 +22,6 @@ namespace ConsolidatorScript
 
             while (true)
             {
-                var ConsolidatedItems = await new Items().ConsolidateModel();
-
                 var i = 1;
                 var AllItems = await new Items().GetAllItems2();
                 //AllItems = from a in AllItems where a.Itemcode == 1358 && a.Accountcode == 1 && a.Supplier == 6 && a.Brandcode == 24 select a;
@@ -66,6 +64,7 @@ namespace ConsolidatorScript
                         {
                             foreach (var itemsList in FinalStock)
                             {
+                                var ConsolidatedItems = await new Items().ConsolidateModel();
                                 var InsertData = await new ItemsLayer().SaveToTable(itemsList, ConsolidatedItems.Max(m => m.ID) + 1);
                                 if (InsertData.Status == "ADDED" || InsertData.Status == "UPDATED")
                                     Console.WriteLine("{0}-->{1} . ItemCode:{2}, AccountCode: {3}, SupplierID: {4}, BrandCode: {5}, Sellprice : {6} Updated : {7} ", i, InsertData.Status, InsertData.ItemCode, InsertData.AccountCode, InsertData.SupplierID, InsertData.BrandCode, InsertData.Sellprice, DateTime.Now.ToString("MM/dd/yyyy hh:mm tt"));
