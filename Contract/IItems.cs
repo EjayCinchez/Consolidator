@@ -15,5 +15,6 @@ namespace ConsolidatorScript.Contract
         Task<IEnumerable<Tbl_rPhar_StockOut>> Tbl_rPhar_StockOut(long ItemCode, int AccountCode, int SupplierID, int BrandID);
         Task<IEnumerable<Tbl_rPhar_StockAdjustments>> Tbl_rPhar_StockAdjustments(long ItemCode, int AccountCode, int SupplierID, int BrandID);
         Task<IEnumerable<ConsolidateModel>> Tbl_rPhar_StockOutNew(long ItemCode, int AccountCode, int SupplierID, int BrandID);
+        Task<IEnumerable<ConsolidateModel>> ConsolidateModel();
     }
 }

@@ -15,6 +15,10 @@ namespace ConsolidatorScript.Model
         public decimal Sellprice { get; set; }
         public int Adjtype { get; set; }
         public decimal Balance { get; set; }
+        public DateTime TransactionDate { get; set; }
+        public bool IsUpdated { get; set; }
+        public bool IsActive { get; set; }
+        public int ID { get; set; }
     }
     public class ConsolidateModelNew : ConsolidateModel
     {

@@ -77,5 +77,13 @@ namespace ConsolidatorScript.Implementation
                 return await sqlCon.QueryAsync<ConsolidateModel>(SQL, new { ItemCode,  AccountCode, SupplierID, BrandID }, commandTimeout: int.MaxValue, commandType: CommandType.Text);
             }
         }
+        public async Task<IEnumerable<ConsolidateModel>> ConsolidateModel()
+        {
+            var SQL = @"select * from Tbl_ConsolidateItems";
+            using (IDbConnection sqlCon = new SqlConnection(Connection.ConnectionString))
+            {
+                return await sqlCon.QueryAsync<ConsolidateModel>(SQL, new { }, commandTimeout: int.MaxValue, commandType: CommandType.Text);
+            }
+        }
     }
 }
