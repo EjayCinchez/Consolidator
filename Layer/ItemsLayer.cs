@@ -16,7 +16,7 @@ namespace ConsolidatorScript.Layer
     {
         readonly Connection Connection = new Connection();
 
-        public async Task<ConsolidateModelNew> SaveToTable(ConsolidateModel ConsolidateModel)
+        public async Task<ConsolidateModelNew> SaveToTable(ConsolidateModel ConsolidateModel, int LastID)
         {
 
             var result = "";
@@ -54,7 +54,7 @@ namespace ConsolidatorScript.Layer
                         }
                         else
                         {
-                            SQL = "insert into Tbl_ConsolidateItems(ItemCode,AccountCode,SupplierID,BrandCode,Sellprice,Balance) values(@ItemCode,@AccountCode,@SupplierID,@BrandCode,@Sellprice,@Balance)";
+                            SQL = "insert into Tbl_ConsolidateItems(ItemCode,AccountCode,SupplierID,BrandCode,Sellprice,Balance,ID) values(@ItemCode,@AccountCode,@SupplierID,@BrandCode,@Sellprice,@Balance,@ID)";
                             await connection.ExecuteAsync(SQL, new
                             {
                                 ConsolidateModel.ItemCode,
@@ -75,7 +75,8 @@ namespace ConsolidatorScript.Layer
                             ConsolidateModel.BrandCode,
                             ConsolidateModel.SupplierID,
                             ConsolidateModel.Sellprice,
-                            ConsolidateModel.Balance
+                            ConsolidateModel.Balance,
+                            ID = LastID
                         }, transaction, commandTimeout: int.MaxValue, commandType: CommandType.Text);
 
                         transaction.Commit();
