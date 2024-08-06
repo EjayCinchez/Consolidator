@@ -62,7 +62,8 @@ namespace ConsolidatorScript.Layer
                                 ConsolidateModel.BrandCode,
                                 ConsolidateModel.SupplierID,
                                 ConsolidateModel.Sellprice,
-                                ConsolidateModel.Balance
+                                ConsolidateModel.Balance,
+                                ID = LastID
                             }, transaction, commandTimeout: int.MaxValue, commandType: CommandType.Text);
                             result = "ADDED";
                         }
@@ -72,11 +73,10 @@ namespace ConsolidatorScript.Layer
                         {
                             ConsolidateModel.ItemCode,
                             ConsolidateModel.AccountCode,
-                            ConsolidateModel.BrandCode,
                             ConsolidateModel.SupplierID,
+                            ConsolidateModel.BrandCode,
                             ConsolidateModel.Sellprice,
-                            ConsolidateModel.Balance,
-                            ID = LastID
+                            ConsolidateModel.Balance
                         }, transaction, commandTimeout: int.MaxValue, commandType: CommandType.Text);
 
                         transaction.Commit();
